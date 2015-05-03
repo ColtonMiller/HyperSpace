@@ -1,0 +1,2 @@
+E:\Documents\GitHub\HyperSpace\HyperSpace\bin\Debug\HyperSpace.exe.config
+E:\Documents\GitHub\HyperSpace\HyperSpace\obj\Debug\HyperSpace.csprojResolveAssemblyReference.cache
