@@ -10,16 +10,19 @@ namespace HyperSpace
     {
         static void Main(string[] args)
         {
+            Console.ReadKey();
+            HyperSpace game = new HyperSpace();
+            game.PlayGame();
         }
     }
     public class Unit
     {
         //properties
-        int X { get; set; }
-        int Y { get; set; }
-        ConsoleColor Color { get; set; }
-        string Symbol { get; set; }
-        bool IsSpaceRift { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public ConsoleColor Color { get; set; }
+        public string Symbol { get; set; }
+        public bool IsSpaceRift { get; set; }
         //variables
         public static List<string> obsticalList = new List<string> {"*",".",":",";","\'","\""};
         static Random randomNumberGenerator = new Random();
@@ -74,7 +77,7 @@ namespace HyperSpace
                     ObstacalList.Add(obstacal);
                 }
                 MoveShip();
-                MoveObstacal();
+                MoveObstacles();
                 DrawGame();
                 if (this.Speed < 170)
                 {
@@ -89,16 +92,63 @@ namespace HyperSpace
             {
                 
                 //variable to hold key pressed
-                ConsoleKeyInfo keyPressed = new ConsoleKeyInfo();
+                ConsoleKey keyPressed = Console.ReadKey().Key;
                 while (Console.KeyAvailable)
                 {
                     Console.ReadKey(true);
                 }
-                if (keyPressed )
+                if (keyPressed == ConsoleKey.LeftArrow && SpaceShip.X > 0)
                 {
-                    
+                    SpaceShip.X--;
+                }
+                else if (keyPressed == ConsoleKey.RightArrow && SpaceShip.X < Console.WindowWidth - 2)
+                {
+                    SpaceShip.X++;
                 }
             }
+        }
+        public void MoveObstacles()
+        {
+            List<Unit> newObstacleList = new List<Unit> { };
+            foreach (Unit obstacle in ObstacalList)
+            {
+                obstacle.Y++;
+                if (obstacle.IsSpaceRift == true && obstacle.X == SpaceShip.X && obstacle.Y == SpaceShip.Y)
+                {
+                    Speed -= 50;
+                }
+                if (obstacle.IsSpaceRift == false && obstacle.X == SpaceShip.X && obstacle.Y == SpaceShip.Y)
+                {
+                    Smashed = true;
+                }
+                if (obstacle.Y > 30)
+                {
+                    newObstacleList.Add(obstacle);
+                }
+                else
+                {
+                    Score++;
+                }
+            }
+            ObstacalList = newObstacleList;
+        }
+        public void DrawGame()
+        {
+            Console.Clear();
+            SpaceShip.Draw();
+            foreach (Unit obstacle in ObstacalList)
+            {
+                obstacle.Draw();
+            }
+            PrintAtPosition(20, 2, "Score: " + Score, ConsoleColor.Green);
+            PrintAtPosition(20, 3, "Speed: " + this.Speed, ConsoleColor.Green);
+            
+        }
+        public void PrintAtPosition(int x, int y, string text, ConsoleColor color)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
         }
         //Constructor
         public HyperSpace()
@@ -111,7 +161,7 @@ namespace HyperSpace
             Console.BufferWidth = 60;
             Console.WindowWidth = 60;
             //initialize SpaceShip 
-           this.SpaceShip = new Unit(29, 29, ConsoleColor.Red, "@", false);
+           this.SpaceShip = new Unit(19, 29, ConsoleColor.Red, "@", false);
             
         }
     }
