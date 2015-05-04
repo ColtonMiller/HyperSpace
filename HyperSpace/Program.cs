@@ -10,7 +10,6 @@ namespace HyperSpace
     {
         static void Main(string[] args)
         {
-            Console.ReadKey();
             HyperSpace game = new HyperSpace();
             game.PlayGame();
         }
@@ -71,9 +70,9 @@ namespace HyperSpace
                     Unit spaceRift = new Unit(randomNumberGenerator.Next(0, 59), 5, ConsoleColor.Green, "%", true);
                     ObstacalList.Add(spaceRift);
                 }
-                else
+                else 
                 {
-                    Unit obstacal = new Unit(randomNumberGenerator.Next(0, 59), 5);
+                    Unit obstacal = new Unit(randomNumberGenerator.Next(0, Console.WindowWidth - 2), 5);
                     ObstacalList.Add(obstacal);
                 }
                 MoveShip();
@@ -82,9 +81,15 @@ namespace HyperSpace
                 if (this.Speed < 170)
                 {
                     this.Speed += 1;
-                    System.Threading.Thread.Sleep(170 - Speed);
                 }
+                System.Threading.Thread.Sleep(190  - Speed);
             }
+            
+            Console.Clear();
+            Console.WriteLine("Your score: " + Score);
+            Console.WriteLine("press any key to end...");
+            System.Threading.Thread.Sleep(2000);
+            Console.ReadKey();
         }
         public void MoveShip()
         {
@@ -117,11 +122,11 @@ namespace HyperSpace
                 {
                     Speed -= 50;
                 }
-                if (obstacle.IsSpaceRift == false && obstacle.X == SpaceShip.X && obstacle.Y == SpaceShip.Y)
+                else if (obstacle.IsSpaceRift == false && obstacle.X == SpaceShip.X && obstacle.Y == SpaceShip.Y)
                 {
                     Smashed = true;
                 }
-                if (obstacle.Y > 30)
+                else if (obstacle.Y < 30)
                 {
                     newObstacleList.Add(obstacle);
                 }
@@ -158,10 +163,10 @@ namespace HyperSpace
             this.ObstacalList = new List<Unit> {};
             Console.BufferHeight = 30;
             Console.WindowHeight = 30;
-            Console.BufferWidth = 60;
-            Console.WindowWidth = 60;
+            Console.BufferWidth = 80;
+            Console.WindowWidth = 80;
             //initialize SpaceShip 
-           this.SpaceShip = new Unit(19, 29, ConsoleColor.Red, "@", false);
+           this.SpaceShip = new Unit(39, 29, ConsoleColor.Red, "@", false);
             
         }
     }
